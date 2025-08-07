@@ -1,0 +1,8 @@
+Create a fresh test project:
+
+mkdir Cypress-Temp-Test
+cd Cypress-Temp-Test
+npm init -y
+
+
+npx cypress cache clear
