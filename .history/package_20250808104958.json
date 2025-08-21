@@ -8,6 +8,7 @@
     "clean:reports": "rimraf cypress/reports && rimraf cypress/screenshots",
     "cy:run": "npm run clean:reports && cypress run",
     "cy:open": "npm run clean:reports && cypress open"
+    
   },
   "keywords": [],
   "author": "",

@@ -59,84 +59,65 @@
 //   cy.wait(5000);
 
 Cypress.Commands.add("loginAndHandlePopup", () => {
-  const phoneWithout91 = Cypress.env("phone"); // e.g. 9876543210
-  const phoneWith91 = "91" + phoneWithout91; // e.g. 919876543210
+  const phoneWithout91 = Cypress.env("phone");
+  const phoneWith91 = "91" + phoneWithout91;
   const password = Cypress.env("password");
 
   cy.visit("/");
 
   cy.get(":nth-child(1) > .block").click();
 
-  // ✅ Handle phone input (React-safe)
+  // ✅ Handle phone input
   cy.get(".form-control").then(($input) => {
-    const input = $input[0];
+    const rawValue = $input.val() || "";
 
-    // React-safe setter
-    const setReactValue = (val) => {
-      const nativeSetter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        "value"
-      ).set;
-      nativeSetter.call(input, val);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-    };
+    // Remove all non-digits (+, space, etc.)
+    const digitsOnly = rawValue.toString().replace(/\D/g, "");
 
-    // 1) Clear completely
-    setReactValue("");
+    // If current value doesn’t start with 91 → we add it
+    const numberToType = digitsOnly.startsWith("91")
+      ? phoneWithout91
+      : phoneWith91;
 
-    // 2) Check what mask injected after clear
-    const afterClear = (input.value || "").replace(/\D/g, "");
-    cy.log(`📱 After clear → "${afterClear}"`);
+    cy.log(`Cleaned input: ${digitsOnly} → Typing: ${numberToType}`);
 
-    // 3) Decide what to enter
-    const valueToSet = afterClear.startsWith("91")
-      ? phoneWithout91 // already has +91 → enter 10 digits only
-      : phoneWith91; // no +91 → enter 91XXXXXXXXXX
-
-    // 4) Set final value
-    setReactValue(valueToSet);
-
-    cy.log(`✅ Final typed: ${(input.value || "").replace(/\D/g, "")}`);
+    // ✅ FORCE clear old masked value before typing
+    cy.wrap($input)
+      .focus()
+      .type("{selectall}{backspace}", { force: true }) // ← KEY FIX
+      .type(numberToType, { delay: 200, log: false });
   });
 
   // ✅ Handle password
-  cy.get("#password").then(($pwd) => {
-    const pwdInput = $pwd[0];
-    const nativeSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      "value"
-    ).set;
-    nativeSetter.call(pwdInput, "");
-    pwdInput.dispatchEvent(new Event("input", { bubbles: true }));
-    pwdInput.dispatchEvent(new Event("change", { bubbles: true }));
-    nativeSetter.call(pwdInput, password);
-    pwdInput.dispatchEvent(new Event("input", { bubbles: true }));
-    pwdInput.dispatchEvent(new Event("change", { bubbles: true }));
-  });
+  cy.get("#password")
+    .focus()
+    .type("{selectall}{backspace}", { force: true }) // ensure empty
+    .type(password, { log: false });
 
   // ✅ Submit
   cy.get(".submit-buttonlogin").click();
-
-  // ✅ Wait for redirect or popup
-  cy.location("pathname", { timeout: 10000 }).should("match", /login|home/);
-
-  // ✅ Handle popup if shown
+  cy.wait(5000);
   cy.get("body").then(($body) => {
     if ($body.find(".mt-6 > .text-2xl").length > 0) {
-      cy.log("🔔 Popup detected");
+      cy.log("🔔 Popup is shown");
 
-      if ($body.find(".top-4").length > 0) {
-        cy.get(".top-4").should("be.visible").click({ force: true });
-        cy.log("✅ Cancel icon clicked");
-      } else if ($body.find(".mt-6 > .flex > .border").length > 0) {
-        cy.get(".mt-6 > .flex > .border")
-          .should("be.visible")
-          .click({ force: true });
-        cy.log("✅ Skip button clicked");
-      } else {
-        cy.log("❌ Popup has no close button");
-      }
+      cy.get("body").then(($b) => {
+        if ($b.find(".top-4").length > 0) {
+          cy.get(".top-4")
+            .should("be.visible")
+            .scrollIntoView()
+            .click({ force: true });
+          cy.log("✅ Cancel icon clicked");
+        } else if ($b.find(".mt-6 > .flex > .border").length > 0) {
+          cy.get(".mt-6 > .flex > .border")
+            .should("be.visible")
+            .scrollIntoView()
+            .click({ force: true });
+          cy.log("✅ Skip button clicked");
+        } else {
+          cy.log("❌ No close button found in popup");
+        }
+      });
 
       cy.get(".mt-6 > .text-2xl", { timeout: 10000 }).should("not.exist");
       cy.log("✅ Popup closed successfully");

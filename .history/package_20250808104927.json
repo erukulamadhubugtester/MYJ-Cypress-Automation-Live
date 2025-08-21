@@ -4,10 +4,10 @@
   "main": "cypress.config.js",
   "scripts": {
     "merge:reports": "mochawesome-merge cypress/reports/*.json > cypress/reports/merged-report.json",
-    "generate:report": "marge cypress/reports/merged-report.json --reportDir cypress/reports/html --inline",
-    "clean:reports": "rimraf cypress/reports && rimraf cypress/screenshots",
-    "cy:run": "npm run clean:reports && cypress run",
-    "cy:open": "npm run clean:reports && cypress open"
+    "generate:report": "marge cypress/reports/merged-report.json --reportDir cypress/reports/html --inline"
+     "clean:reports": "rimraf cypress/reports && rimraf cypress/screenshots",
+  "cy:run": "npm run clean:reports && cypress run",
+  "cy:open": "npm run clean:reports && cypress open"
   },
   "keywords": [],
   "author": "",

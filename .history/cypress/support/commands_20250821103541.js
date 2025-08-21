@@ -67,53 +67,27 @@ Cypress.Commands.add("loginAndHandlePopup", () => {
 
   cy.get(":nth-child(1) > .block").click();
 
-  // ✅ Handle phone input (React-safe)
+  // ✅ Handle phone input
   cy.get(".form-control").then(($input) => {
-    const input = $input[0];
+    const rawValue = $input.val() || "";
+    const digitsOnly = rawValue.toString().replace(/\D/g, "");
 
-    // React-safe setter
-    const setReactValue = (val) => {
-      const nativeSetter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        "value"
-      ).set;
-      nativeSetter.call(input, val);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-    };
+    cy.log(`Existing: "${rawValue}" → Digits: "${digitsOnly}"`);
 
-    // 1) Clear completely
-    setReactValue("");
-
-    // 2) Check what mask injected after clear
-    const afterClear = (input.value || "").replace(/\D/g, "");
-    cy.log(`📱 After clear → "${afterClear}"`);
-
-    // 3) Decide what to enter
-    const valueToSet = afterClear.startsWith("91")
-      ? phoneWithout91 // already has +91 → enter 10 digits only
-      : phoneWith91; // no +91 → enter 91XXXXXXXXXX
-
-    // 4) Set final value
-    setReactValue(valueToSet);
-
-    cy.log(`✅ Final typed: ${(input.value || "").replace(/\D/g, "")}`);
+    // Always clear & retype the clean "91XXXXXXXXXX"
+    cy.wrap($input)
+      .focus()
+      .type("{selectall}{backspace}", { force: true }) // Wipe everything
+      .should("have.value", "") // ensure cleared
+      .type(phoneWith91, { delay: 200, log: false }); // type final value
   });
 
   // ✅ Handle password
-  cy.get("#password").then(($pwd) => {
-    const pwdInput = $pwd[0];
-    const nativeSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      "value"
-    ).set;
-    nativeSetter.call(pwdInput, "");
-    pwdInput.dispatchEvent(new Event("input", { bubbles: true }));
-    pwdInput.dispatchEvent(new Event("change", { bubbles: true }));
-    nativeSetter.call(pwdInput, password);
-    pwdInput.dispatchEvent(new Event("input", { bubbles: true }));
-    pwdInput.dispatchEvent(new Event("change", { bubbles: true }));
-  });
+  cy.get("#password")
+    .focus()
+    .type("{selectall}{backspace}", { force: true }) // clear old value
+    .should("have.value", "")
+    .type(password, { log: false });
 
   // ✅ Submit
   cy.get(".submit-buttonlogin").click();

@@ -67,53 +67,43 @@ Cypress.Commands.add("loginAndHandlePopup", () => {
 
   cy.get(":nth-child(1) > .block").click();
 
-  // ✅ Handle phone input (React-safe)
+  // ✅ Handle phone input with retry safeguard
   cy.get(".form-control").then(($input) => {
-    const input = $input[0];
-
-    // React-safe setter
-    const setReactValue = (val) => {
-      const nativeSetter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        "value"
-      ).set;
-      nativeSetter.call(input, val);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+    const typeNumber = () => {
+      cy.wrap($input)
+        .focus()
+        .type("{selectall}{backspace}", { force: true })
+        .should("have.value", "")
+        // step 1: type "63" to wake up mask
+        .type("63", { delay: 100 })
+        // step 2: clear again and type full number
+        .type("{selectall}{backspace}", { force: true })
+        .type(phoneWith91, { delay: 150, log: false });
     };
 
-    // 1) Clear completely
-    setReactValue("");
+    // Try typing
+    typeNumber();
 
-    // 2) Check what mask injected after clear
-    const afterClear = (input.value || "").replace(/\D/g, "");
-    cy.log(`📱 After clear → "${afterClear}"`);
-
-    // 3) Decide what to enter
-    const valueToSet = afterClear.startsWith("91")
-      ? phoneWithout91 // already has +91 → enter 10 digits only
-      : phoneWith91; // no +91 → enter 91XXXXXXXXXX
-
-    // 4) Set final value
-    setReactValue(valueToSet);
-
-    cy.log(`✅ Final typed: ${(input.value || "").replace(/\D/g, "")}`);
+    // ✅ Retry safeguard: retype if digits < 12
+    cy.wrap($input)
+      .invoke("val")
+      .then((val) => {
+        const clean = (val || "").replace(/\D/g, "");
+        if (clean.length < phoneWith91.length) {
+          cy.log(`⚠️ Retyping, only got "${clean}" digits`);
+          typeNumber();
+        } else {
+          cy.log(`✅ Final typed: ${clean}`);
+        }
+      });
   });
 
   // ✅ Handle password
-  cy.get("#password").then(($pwd) => {
-    const pwdInput = $pwd[0];
-    const nativeSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      "value"
-    ).set;
-    nativeSetter.call(pwdInput, "");
-    pwdInput.dispatchEvent(new Event("input", { bubbles: true }));
-    pwdInput.dispatchEvent(new Event("change", { bubbles: true }));
-    nativeSetter.call(pwdInput, password);
-    pwdInput.dispatchEvent(new Event("input", { bubbles: true }));
-    pwdInput.dispatchEvent(new Event("change", { bubbles: true }));
-  });
+  cy.get("#password")
+    .focus()
+    .type("{selectall}{backspace}", { force: true })
+    .should("have.value", "")
+    .type(password, { log: false });
 
   // ✅ Submit
   cy.get(".submit-buttonlogin").click();

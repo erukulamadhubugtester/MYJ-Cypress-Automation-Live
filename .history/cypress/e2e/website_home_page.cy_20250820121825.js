@@ -5,20 +5,18 @@ describe("MakeYourJodi UI Smoke Test", () => {
 
   it("verifies and highlights all key UI elements", () => {
     const highlight = (selector, label) => {
-      cy.get("body").then(($body) => {
-        if ($body.find(selector).length > 0) {
-          cy.get(selector, { timeout: 10000 }).each(($el, index) => {
-            cy.wrap($el)
-              .scrollIntoView()
-              .invoke("css", "outline", "3px solid red")
-              .invoke("text")
-              .then((text) => {
-                cy.log(`${label} [${index + 1}]: ${text.trim()}`);
-              });
+      cy.get(selector).each(($el, index, $list) => {
+        cy.wrap($el)
+          .scrollIntoView()
+          .invoke("css", "outline", "3px solid red")
+          .invoke("text")
+          .then((text) => {
+            if ($list.length > 1) {
+              cy.log(`${label} [${index + 1}]: ${text.trim()}`);
+            } else {
+              cy.log(`${label}: ${text.trim()}`);
+            }
           });
-        } else {
-          cy.log(`⚠️ Skipped: ${label} (selector: ${selector}) not found`);
-        }
       });
     };
 
