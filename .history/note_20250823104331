@@ -1,0 +1,37 @@
+# Create a fresh test project:
+
+# mkdir Cypress-Temp-Test
+# cd Cypress-Temp-Test
+# npm init -y
+
+# 📦 Step 2: Install Cypress & Reporter
+
+# npm install --save-dev cypress
+# npm install --save-dev cypress-mochawesome-reporter
+# 
+
+# ✅ Now test: check out
+# ls node_modules/cypress-mochawesome-reporter
+
+# npx cypress cache clear
+# or
+# npm install --save-dev cypress-mochawesome-reporter
+
+# git add .
+# git commit -m"message "
+# git push
+
+# git stash
+
+# #  my office code branch name is madhu-office
+# git checkout main          # Switch to main branch
+# git pull origin main       # Update with remote changes
+# git merge madhu-office     # Merge changes from madhu-office into main
+# git push origin main       # Push merged main branch to GitHub
+
+#  git log --oneline           #check out code
+
+#  git checkout office-mac   # switch to my branch
+
+#  git branch                 #  current branch check
+
