@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "main": "cypress.config.js",
   "scripts": {
+    "clean:reports": "rimraf cypress/reports/* cypress/screenshots/* cypress/videos/*",
     "merge:reports": "mochawesome-merge cypress/reports/*.json > cypress/reports/merged-report.json",
     "generate:report": "marge cypress/reports/merged-report.json --reportDir cypress/reports/html --inline",
-    "clean:reports": "rimraf cypress/reports && rimraf cypress/screenshots",
     "cy:run": "npm run clean:reports && cypress run",
-    "cy:open": "npm run clean:reports && cypress open"
+    "cy:open": "npm run clean:reports && cypress open",
+    "test": "npm run clean:reports && cypress run",
+    "test:chrome": "npm run clean:reports && cypress run --browser chrome",
+    "test:spec": "npm run clean:reports && cypress run --spec"
   },
   "keywords": [],
   "author": "",

@@ -9,6 +9,7 @@
 # npm install --save-dev cypress
 # npm install --save-dev cypress-mochawesome-reporter
 # npm install -D cypress-xpath
+# npm install --save-dev rimraf
 
 
 # ✅ Now test: check out
