@@ -4,6 +4,8 @@ describe("Login and Popup Handling", () => {
   });
 
   it("should land on homepage after login", () => {
-    // cy.url().should("include", "/home");
+    cy.wait(5000);
+    cy.xpath("//a[text()='Dashboard']").click();
+    cy.url().should("include", "/home");
   });
 });

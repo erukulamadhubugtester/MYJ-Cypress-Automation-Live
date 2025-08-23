@@ -8,6 +8,8 @@
 
 # npm install --save-dev cypress
 # npm install --save-dev cypress-mochawesome-reporter
+# npm install -D cypress-xpath
+
 
 # ✅ Now test: check out
 # ls node_modules/cypress-mochawesome-reporter

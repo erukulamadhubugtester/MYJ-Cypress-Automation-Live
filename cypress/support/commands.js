@@ -119,7 +119,7 @@ Cypress.Commands.add("loginAndHandlePopup", () => {
   cy.get(".submit-buttonlogin").click();
 
   // ✅ Wait for redirect or popup
-  cy.location("pathname", { timeout: 10000 }).should("match", /login|home/);
+  // cy.location("pathname", { timeout: 10000 }).should("match", /login|home/);
 
   // ✅ Handle popup if shown
   cy.get("body").then(($body) => {

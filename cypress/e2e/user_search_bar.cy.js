@@ -4,9 +4,13 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
   });
 
   it("Search ", () => {
+      cy.wait(2000);
+    cy.xpath("//a[text()='Dashboard']").click();
     cy.url().should("include", "/home");
 
     // 1. Check the main title
+
+    cy.wait(2000);
     cy.get(".top-1\\/2 > .text-2xl")
       .should("be.visible")
       .invoke("css", "outline", "3px solid red")
@@ -14,6 +18,7 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
       .then((text) => {
         cy.log("Main Title:", text.trim());
       });
+
 
     // search Bar
     const location = "India";

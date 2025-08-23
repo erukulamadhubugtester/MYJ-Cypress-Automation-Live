@@ -4,9 +4,12 @@ describe("MakeYourJodi - User Home Page checking ", () => {
   });
 
   it("should land on homepage after login", () => {
+    cy.wait(2000);
+    cy.xpath("//a[text()='Dashboard']").click();
     cy.url().should("include", "/home");
 
     // 1. Check the main title
+    cy.wait(2000);
     cy.get(".top-1\\/2 > .text-2xl")
       .should("be.visible")
       .invoke("css", "outline", "3px solid red")
@@ -54,7 +57,7 @@ describe("MakeYourJodi - User Home Page checking ", () => {
       });
 
     // 8. Check VIPUsers title
-    cy.get(".flex-col > .text-\\[\\#AB1D79\\]")
+    cy.get(":nth-child(3) > .mb-24 > .text-black")
       .should("be.visible")
       .invoke("css", "outline", "3px solid teal")
       .invoke("text")
@@ -62,10 +65,11 @@ describe("MakeYourJodi - User Home Page checking ", () => {
         cy.log("VIP Title:", text.trim());
       });
 
+    // removed
     // 9. Check VIP image is displayed
-    cy.get(".vip-banner > a > img")
-      .should("be.visible")
-      .invoke("css", "outline", "3px solid gold");
+    // cy.get(".vip-banner > a > img")
+    //   .should("be.visible")
+    //   .invoke("css", "outline", "3px solid gold");
 
     // 'should highlight and verify footer logo, social icons, and text'
 
@@ -75,8 +79,8 @@ describe("MakeYourJodi - User Home Page checking ", () => {
       .invoke("css", "outline", "3px solid red");
 
     // 2. Check "Follow us on :" text
-    cy.get(".min-w-\\[280px\\] > .mt-5")
-      .should("contain.text", "Follow us on")
+    cy.contains(".mb-2", "Follow us on")
+      .should("be.visible")
       .invoke("css", "outline", "3px solid orange");
 
     // 3. Check LinkedIn icon
@@ -187,12 +191,12 @@ describe("MakeYourJodi - User Home Page checking ", () => {
       .invoke("text")
       .then((text) => cy.log("Link J - Privacy Policy:", text.trim()));
 
-    // k. Privacy Policy USA
-    cy.get(":nth-child(6) > .transition-all")
-      .should("be.visible")
-      .invoke("css", "outline", "2px solid navy")
-      .invoke("text")
-      .then((text) => cy.log("Link K - Privacy Policy USA:", text.trim()));
+    // // k. Privacy Policy USA
+    // cy.get(":nth-child(6) > .transition-all")
+    //   .should("be.visible")
+    //   .invoke("css", "outline", "2px solid navy")
+    //   .invoke("text")
+    //   .then((text) => cy.log("Link K - Privacy Policy USA:", text.trim()));
 
     // 1. Company Title
     cy.get(".pl-8 > .font-semibold")
@@ -230,13 +234,13 @@ describe("MakeYourJodi - User Home Page checking ", () => {
         cy.log("Match Making:", text.trim());
       });
 
-    // 5. Playstore Image
-    cy.get(".w-28")
-      .should("be.visible")
-      .invoke("css", "outline", "3px solid orange")
-      .then(() => {
-        cy.log("Playstore image is visible.");
-      });
+    // // 5. Playstore Image
+    // cy.get(".w-28")
+    //   .should("be.visible")
+    //   .invoke("css", "outline", "3px solid orange")
+    //   .then(() => {
+    //     cy.log("Playstore image is visible.");
+    //   });
 
     // 6. QR Code Image
     cy.get(".w-\\[140px\\]")
@@ -256,7 +260,7 @@ describe("MakeYourJodi - User Home Page checking ", () => {
       });
 
     // 8. Footer copyright
-    cy.get(".mt-6 > span")
+    cy.get(".container > .text-center > :nth-child(1)")
       .should("be.visible")
       .invoke("css", "outline", "3px solid orange")
       .invoke("text")

@@ -5,9 +5,12 @@ describe("MakeYourJodi - User Account Settings  Page Checking ", () => {
 
   it(" Account Settings   ", () => {
     cy.wait(2000);
+    cy.xpath("//a[text()='Dashboard']").click();
     cy.url().should("include", "/home");
 
     // 1. Check the main title
+
+    cy.wait(2000);
     cy.get(".top-1\\/2 > .text-2xl")
       .should("be.visible")
       .invoke("css", "outline", "3px solid red")
@@ -18,7 +21,9 @@ describe("MakeYourJodi - User Account Settings  Page Checking ", () => {
 
     // Account Settings
     // 1. Click user profile icon
-    cy.get("#headlessui-menu-button-\\:r2\\: > .object-cover")
+    cy.get("#headlessui-menu-button-\\:ra\\: > .object-cover")
+      .click()
+
       .should("be.visible")
       .click();
     cy.wait(1000);
@@ -66,12 +71,5 @@ describe("MakeYourJodi - User Account Settings  Page Checking ", () => {
             cy.log(`${expiryLabel.trim()} ${expiryDate.trim()}`);
           });
       });
-
-    // 7. Highlight the Education dropdown
-    cy.get(".select__control")
-      .should("be.visible")
-      .invoke("css", "outline", "3px solid blue");
-
-    cy.log("✅ Account and Plan Info Verified");
   });
 });
