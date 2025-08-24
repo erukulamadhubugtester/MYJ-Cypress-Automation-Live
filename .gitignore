@@ -7,7 +7,7 @@ yarn.lock
 cypress/screenshots/
 cypress/videos/
 cypress/downloads/
-
+cypress/reports
 # Cypress config cache
 .cypress-cache/
 .cache/

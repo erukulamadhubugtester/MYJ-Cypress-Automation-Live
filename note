@@ -9,6 +9,8 @@
 # npm install --save-dev cypress
 # npm install --save-dev cypress-mochawesome-reporter
 # npm install -D cypress-xpath
+# npm install --save-dev @4tw/cypress-drag-drop
+
 
 
 # ✅ Now test: check out
