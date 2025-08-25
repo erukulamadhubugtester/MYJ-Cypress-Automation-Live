@@ -4,7 +4,7 @@ describe("MakeYourJodi - User Notifications  Page Checking ", () => {
   });
 
   it(" Notifications  ", () => {
-      cy.wait(2000);
+    cy.wait(2000);
     cy.xpath("//a[text()='Dashboard']").click();
     cy.url().should("include", "/home");
 
@@ -19,12 +19,11 @@ describe("MakeYourJodi - User Notifications  Page Checking ", () => {
         cy.log("Main Title:", text.trim());
       });
 
-
     // Notification
     cy.log("🔔 Clicking on Notification Icon");
 
     // 1. Click on the Notification icon
-    cy.get(":nth-child(6) > .relative > .absolute")
+    cy.get(":nth-child(7) > .relative > .absolute")
       .should("be.visible")
       .click();
 

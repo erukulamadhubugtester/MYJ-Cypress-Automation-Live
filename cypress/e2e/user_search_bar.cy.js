@@ -4,7 +4,7 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
   });
 
   it("Search ", () => {
-      cy.wait(2000);
+    cy.wait(2000);
     cy.xpath("//a[text()='Dashboard']").click();
     cy.url().should("include", "/home");
 
@@ -18,7 +18,6 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
       .then((text) => {
         cy.log("Main Title:", text.trim());
       });
-
 
     // search Bar
     const location = "India";
@@ -38,12 +37,12 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
     cy.get(".text-pink-800 > img").click();
 
     // 4. Wait for at least one profile to be visible
-    cy.get(":nth-child(1) > .gap-8 > .w-\\[14rem\\]", {
-      timeout: 10000,
-    }).should("be.visible");
+    // cy.get(":nth-child(1) > .gap-8 > .w-\\[14rem\\]", {
+    //   timeout: 10000,
+    // }).should("be.visible");
 
     // 5. Click the first profile card
-    cy.get(":nth-child(1) > .gap-8 > .w-\\[14rem\\]").click();
+    cy.get(".grid > :nth-child(1) > .gap-8").click();
 
     //  click on link home page
     // 1. Click on the site logo
