@@ -25,7 +25,7 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
     let profileNameText = "";
 
     // 1. Click on search icon
-    cy.get(".text-pink-800 > img").click();
+    cy.get(".absolute > .text-pink-800 > img").click();
 
     // 2. Type location in search input
     cy.get(".lg\\:gap-8 > div.items-center > .transition-all")
@@ -34,7 +34,7 @@ describe("MakeYourJodi - User Search Page Checking ", () => {
       .type(location, { delay: 100 });
 
     // 3. Click search again
-    cy.get(".text-pink-800 > img").click();
+    cy.get(".absolute > .text-pink-800 > img").click();
 
     // 4. Wait for at least one profile to be visible
     // cy.get(":nth-child(1) > .gap-8 > .w-\\[14rem\\]", {
