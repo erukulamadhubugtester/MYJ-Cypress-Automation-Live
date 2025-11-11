@@ -74,7 +74,7 @@ module.exports = defineConfig({
     inlineAssets: true,
   },
   e2e: {
-    baseUrl: "https://makeyourjodi.com",
+    baseUrl: "https://www.makeyourjodi.com",
     env: {
       phone: process.env.CYPRESS_phone,
       password: process.env.CYPRESS_password,

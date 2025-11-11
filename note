@@ -4,6 +4,10 @@
 # cd Cypress-Temp-Test
 # npm init -y
 
+npx cypress run --browser chrome
+npx cypress run --browser chrome --headless
+
+
 # 📦 Step 2: Install Cypress & Reporter
 
 # npm install --save-dev cypress
